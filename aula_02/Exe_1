@@ -1,0 +1,375 @@
+'''
+1. Considere listas de valores inteiros e implemente uma função que receba
+como parâmetros uma lista encadeada e um valor inteiro n, retire da lista
+todas as ocorrências de n e retorne a lista resultante. Esta função deve
+obedecer ao protótipo:
+
+def retira_n(lst, n):
+'''
+
+
+class No:
+    def __init__(self, dado):
+        self.dado = dado
+        self.proximo = None 
+
+class ListaEncadeada:
+    def __init__(self):
+        self.cabeca = None
+
+    def adicionar(self, dado):
+        novo_no = No(dado)
+        if not self.cabeca:
+            self.cabeca = novo_no
+            return 
+        ultimo = self.cabeca 
+        while ultimo.proximo:
+            ultimo = ultimo.proximo  
+        ultimo.proximo = novo_no
+
+    def impirmirLista(self):
+        atual = self.cabeca 
+        while atual:
+            print(atual.dado, end=' -> ')
+            atual = atual.proximo 
+        print('None')
+
+
+def retira_n(lista, n):
+    if not lista.cabeca:
+        return lista 
+    
+    #removendo do inicio
+    atual = lista.cabeca 
+    while atual and atual.proximo:
+        if atual.proximo.dado == n:
+            atual.proximo = atual.proximo.proximo
+        else:
+            atual = atual.proximo 
+
+    return lista 
+
+lista = ListaEncadeada()
+valores = [1, 2, 3, 3, 6, 8, 7]
+for v in valores:
+    lista.adicionar(v)
+
+print("lista original")
+lista.impirmirLista()
+
+n = 2
+retira_n(lista, n)
+
+print(f"lista apos remover {n}:")
+lista.impirmirLista()
+
+
+
+'''
+2. Considere listas de valores inteiros e implemente uma função que receba
+como parâmetro uma lista encadeada e um valor inteiro n e divida a lista em
+duas, de forma a segunda lista começar no primeiro nó logo após a
+ocorrência de n na lista original. A figura a seguir ilustra esta separação:
+'''
+
+
+class No:
+    def __init__(self, dado):
+        self.dado = dado
+        self.proximo = None
+
+class ListaEncadeada:
+    def __init__(self):
+        self.cabeca = None
+
+    def adicionar(self, dado):
+        novo_no = No(dado)
+        if not self.cabeca:
+            self.cabeca = novo_no
+            return
+        ultimo = self.cabeca
+        while ultimo.proximo:
+            ultimo = ultimo.proximo
+        ultimo.proximo = novo_no
+
+    def imprimir_lista(self):
+        atual = self.cabeca
+        while atual:
+            print(atual.dado, end=' -> ')
+            atual = atual.proximo
+        print('None')
+
+def retira_n(lista, n):
+    if not lista.cabeca:
+        return lista
+
+    while lista.cabeca and lista.cabeca.dado == n:
+        lista.cabeca = lista.cabeca.proximo
+    
+    atual = lista.cabeca
+    while atual and atual.proximo:
+        if atual.proximo.dado == n:
+            atual.proximo = atual.proximo.proximo
+        else:
+            atual = atual.proximo
+    
+    return lista
+
+def separa(lista, n):
+    if not lista.cabeca:
+        return None
+    
+    atual = lista.cabeca
+    while atual and atual.proximo:
+        if atual.dado == n:
+            nova_lista = ListaEncadeada()
+            nova_lista.cabeca = atual.proximo
+            atual.proximo = None
+            return nova_lista
+        atual = atual.proximo
+    
+    return None
+
+lista = ListaEncadeada()
+valores = [3, 17, 5, 12, 1]
+for v in valores:
+    lista.adicionar(v)
+
+print("lista original:")
+lista.imprimir_lista()
+
+n = 5
+novalista = separa(lista, n)
+
+print("lista original apos a separaçao:")
+lista.imprimir_lista()
+
+if novalista:
+    print("nova lista:")
+    novalista.imprimir_lista()
+
+
+
+
+'''
+3. Implemente uma função que construa uma nova lista com a intercalação
+dos nós de outras duas listas passadas como parâmetros. Esta função deve
+retornar a lista resultante, conforme ilustrado a seguir:
+
+Esta função deve obedecer ao protótipo:
+def merge(l1, l2):
+'''
+
+
+class No:
+    def __init__(self, dado):
+        self.dado = dado
+        self.proximo = None
+
+class ListaEncadeada:
+    def __init__(self):
+        self.cabeca = None
+
+    def adicionar(self, dado):
+        novo_no = No(dado)
+        if not self.cabeca:
+            self.cabeca = novo_no
+            return
+        ultimo = self.cabeca
+        while ultimo.proximo:
+            ultimo = ultimo.proximo
+        ultimo.proximo = novo_no
+
+    def imprimir_lista(self):
+        atual = self.cabeca
+        while atual:
+            print(atual.dado, end=' -> ')
+            atual = atual.proximo
+        print('None')
+
+def retira_n(lista, n):
+    if not lista.cabeca:
+        return lista
+    
+    while lista.cabeca and lista.cabeca.dado == n:
+        lista.cabeca = lista.cabeca.proximo
+    
+    atual = lista.cabeca
+    while atual and atual.proximo:
+        if atual.proximo.dado == n:
+            atual.proximo = atual.proximo.proximo
+        else:
+            atual = atual.proximo
+    
+    return lista
+
+def separa(lista, n):
+    if not lista.cabeca:
+        return None
+    
+    atual = lista.cabeca
+    while atual and atual.proximo:
+        if atual.dado == n:
+            nova_lista = ListaEncadeada()
+            nova_lista.cabeca = atual.proximo
+            atual.proximo = None
+            return nova_lista
+        atual = atual.proximo
+    
+    return None
+
+def mesclar(l1, l2):
+    nova_lista = ListaEncadeada()
+    atual1 = l1.cabeca
+    atual2 = l2.cabeca
+    
+    while atual1 or atual2:
+        if atual1:
+            nova_lista.adicionar(atual1.dado)
+            atual1 = atual1.proximo
+        if atual2:
+            nova_lista.adicionar(atual2.dado)
+            atual2 = atual2.proximo
+    
+    return nova_lista
+
+lista1 = ListaEncadeada()
+valores1 = [2.1, 4.5, 1.0]
+for v in valores1:
+    lista1.adicionar(v)
+
+lista2 = ListaEncadeada()
+valores2 = [7.2, 3.1, 9.8]
+for v in valores2:
+    lista2.adicionar(v)
+
+print("lista 1:")
+lista1.imprimir_lista()
+print("lista 2:")
+lista2.imprimir_lista()
+
+lista_mesclada = mesclar(lista1, lista2)
+print("lista mesclada:")
+lista_mesclada.imprimir_lista()
+
+
+
+'''
+4. Implemente uma função que receba como parâmetro uma lista encadeada
+e inverta o encadeamento de seus nós, retornando a lista resultante. Após a
+execução desta função, cada nó da lista vai estar referenciando (prox) o nó
+que originalmente era seu antecessor, e o último nó da lista passará a ser o
+primeiro nó da lista invertida, conforme ilustrado a seguir:
+
+Esta função deve obedecer ao protótipo:
+def inverte(lst):
+'''
+
+
+class No:
+    def __init__(self, valor):
+        self.valor = valor  
+        self.prox = None  
+
+class ListaEncadeada:
+    def __init__(self):
+        self.cabeca = None  
+
+    def adicionar(self, valor):
+        novo_no = No(valor)
+        if not self.cabeca:
+            self.cabeca = novo_no
+        else:
+            atual = self.cabeca
+            while atual.prox:
+                atual = atual.prox
+            atual.prox = novo_no
+
+    def exibir(self):
+        atual = self.cabeca
+        while atual:
+            print(atual.valor, end=" -> ")
+            atual = atual.prox
+        print("None")
+
+    def inverter(self):
+        anterior = None
+        atual = self.cabeca
+        while atual:
+            proximo = atual.prox  
+            atual.prox = anterior  
+            anterior = atual  
+            atual = proximo  
+        self.cabeca = anterior  
+
+
+lista = ListaEncadeada()
+lista.adicionar(2.1)
+lista.adicionar(4.5)
+lista.adicionar(1.0)
+lista.adicionar(7.2)
+lista.adicionar(9.8)
+
+print("Lista Original:")
+lista.exibir()
+
+lista.inverter()
+
+print("Lista Invertida:")
+lista.exibir()
+
+
+
+'''
+5. Considere listas que armazenam cadeias de caracteres e implemente uma
+função para testar se duas listas passadas como parâmetros são iguais. Essa
+função deve obedecer ao protótipo:
+
+def igual(l1, l2):
+'''
+
+
+def igual(l1, l2):
+    return l1 == l2
+
+
+a = ["Gabriel", "Balsemao", "Ferreira"]
+b = ["Gabriel", "Balsemao", "Ferreira"]
+c = ["lista", "diferente"]
+
+teste1 = igual(a, b)  # True
+teste2 = igual(a, c)  # False
+
+print(teste1)  # said: True
+print(teste2)  # saida: False
+
+
+
+
+'''
+6. Considere listas que armazenam cadeias de caracteres e implemente uma
+função para criar uma cópia de uma lista encadeada. Essa função deve
+obedecer ao protótipo:
+
+def copia(lst):
+'''
+
+
+def igual(l1, l2):
+    return l1 == l2
+
+def copia(lst):
+    return lst[:]
+
+
+a = ["ola", "mundo", "teste"]
+b = ["ola", "mundo", "teste"]
+c = ["diferente", "lista"]
+
+teste1 = igual(a, b) 
+teste2 = igual(a, c)
+
+copia_lista = copia(a)
+print(teste1)  
+print(teste2) 
+print(copia_lista)
