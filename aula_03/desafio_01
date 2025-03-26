@@ -1,0 +1,90 @@
+import random
+
+# Classe que representa um nó na lista encadeada circular
+class No:
+    def __init__(self, dado):
+        self.dado = dado    # Armazena o nome do jogador
+        self.proximo = None # Ponteiro para o próximo nó (jogador)
+
+# Classe que representa a lista encadeada circular
+class ListaEncadeadaCircular:
+    def __init__(self):
+        self.cabeca = None  # Referência inicial da lista
+
+    # Método para inserir um jogador na lista
+    def inserir(self, dado):
+        novo_no = No(dado)
+        if not self.cabeca:
+            self.cabeca = novo_no
+            self.cabeca.proximo = self.cabeca  # O primeiro elemento aponta para si mesmo (circular)
+        else:
+            temp = self.cabeca
+            # Percorre até o último nó
+            while temp.proximo != self.cabeca:
+                temp = temp.proximo
+            temp.proximo = novo_no         # Liga o último nó ao novo
+            novo_no.proximo = self.cabeca  # Fecha o ciclo apontando para o primeiro
+
+    # Método para remover um jogador da lista
+    def remover(self, alvo):
+        if not self.cabeca:
+            return
+        atual = self.cabeca
+        anterior = None
+        while True:
+            if atual.dado == alvo:
+                if anterior:  # Caso o jogador não seja o primeiro da lista
+                    anterior.proximo = atual.proximo
+                else:  # Caso o jogador eliminado seja o primeiro da lista
+                    temp = self.cabeca
+                    while temp.proximo != self.cabeca:
+                        temp = temp.proximo
+                    temp.proximo = self.cabeca.proximo
+                    self.cabeca = self.cabeca.proximo
+                return  # Encerra a função após a remoção
+            anterior = atual
+            atual = atual.proximo
+            if atual == self.cabeca:
+                break  # Evita loop infinito caso não encontre o jogador
+
+    # Método para exibir os jogadores presentes na lista
+    def exibir(self):
+        nos = []
+        temp = self.cabeca
+        if temp:
+            while True:
+                nos.append(temp.dado)  # Adiciona cada jogador à lista
+                temp = temp.proximo
+                if temp == self.cabeca:
+                    break  # Encerra quando o ciclo se completa
+        return nos
+
+# Função principal que executa o jogo da Batata Quente
+def batata_quente(jogadores):
+    lista = ListaEncadeadaCircular()  # Cria a lista encadeada circular
+    for jogador in jogadores:
+        lista.inserir(jogador)    # Insere cada jogador na lista
+
+    print(f"Início do jogo com os jogadores: {lista.exibir()}")
+
+    # Loop até que reste apenas um jogador
+    while len(lista.exibir()) > 1:
+        k = random.randint(1, 10)  # Número aleatório gerado a cada rodada
+        print(f"Número gerado: {k}")
+
+        # Avança pela lista até o k-ésimo jogador
+        temp = lista.cabeca
+        for _ in range(k - 1):
+            temp = temp.proximo
+
+        # Eliminação do jogador sorteado
+        print(f"{temp.dado} foi eliminado!")
+        lista.remover(temp.dado)
+        print(f"Jogadores restantes: {lista.exibir()}\n")
+
+    # Exibe o vencedor
+    print(f"O vencedor é: {lista.exibir()[0]}!")
+
+# Exemplo de uso
+jogadores = ["Ana", "Bruno", "Carla", "Daniel", "Eduarda"]
+batata_quente(jogadores)
