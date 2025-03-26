@@ -1,0 +1,119 @@
+class No:
+    """
+    Classe que representa um nó na lista encadeada circular.
+    Cada nó contém um dado (dado) e uma referência para o próximo nó (proximo).
+    """
+    def __init__(self, dado):
+        self.dado = dado  # Armazena o valor do nó
+        self.proximo = None  # Aponta para o próximo nó (inicialmente None)
+
+class ListaCircular:
+    """
+    Classe que implementa uma lista simplesmente encadeada circular.
+    """
+    def __init__(self):
+        self.cabeca = None  # Inicialmente, a lista está vazia
+
+    # 1. Inserir elemento no final da lista
+    def inserir_no_fim(self, dado):
+        """
+        Insere um novo elemento no final da lista circular.
+        """
+        novo_no = No(dado)  # Cria um novo nó
+        if not self.cabeca:  # Caso especial: lista vazia
+            self.cabeca = novo_no
+            self.cabeca.proximo = self.cabeca  # O único elemento aponta para ele mesmo
+        else:
+            temp = self.cabeca
+            while temp.proximo != self.cabeca:  # Percorre até o último elemento
+                temp = temp.proximo
+            temp.proximo = novo_no  # Aponta o último elemento para o novo nó
+            novo_no.proximo = self.cabeca  # Aponta o novo nó para o primeiro elemento
+
+    # 2. Buscar elemento na lista
+    def buscar(self, valor):
+        """
+        Busca um valor específico na lista circular.
+        Retorna True se encontrado e False caso contrário.
+        """
+        if not self.cabeca:  # Caso especial: lista vazia
+            return False
+        temp = self.cabeca
+        while True:
+            if temp.dado == valor:  # Se encontrar o valor, retorna True
+                return True
+            temp = temp.proximo
+            if temp == self.cabeca:  # Se voltar ao início, encerra a busca
+                break
+        return False  # Valor não encontrado
+
+    # 3. Remover elemento específico
+    def remover(self, valor):
+        """
+        Remove um elemento específico da lista circular.
+        """
+        if not self.cabeca:  # Caso especial: lista vazia
+            return
+        temp = self.cabeca
+        anterior = None
+        while True:
+            if temp.dado == valor:  # Se encontrar o valor
+                if anterior:  # Caso o valor não seja o primeiro nó
+                    anterior.proximo = temp.proximo
+                else:
+                    # Caso especial: remover o primeiro nó
+                    atual = self.cabeca
+                    while atual.proximo != self.cabeca:  # Encontra o último nó
+                        atual = atual.proximo
+                    atual.proximo = self.cabeca.proximo  # Último aponta para o segundo nó
+                    self.cabeca = self.cabeca.proximo  # Atualiza a cabeça da lista
+                return
+            anterior = temp
+            temp = temp.proximo
+            if temp == self.cabeca:  # Se voltar ao início, encerra a busca
+                break
+
+    # 4. Contar elementos na lista
+    def contar_elementos(self):
+        """
+        Conta o número total de elementos na lista circular.
+        """
+        if not self.cabeca:  # Caso especial: lista vazia
+            return 0
+        contador = 0
+        temp = self.cabeca
+        while True:
+            contador += 1
+            temp = temp.proximo
+            if temp == self.cabeca:  # Quando retornar ao início, encerra a contagem
+                break
+        return contador
+
+    # Função auxiliar para exibir a lista
+    def exibir(self):
+        """
+        Exibe todos os elementos da lista circular.
+        """
+        if not self.cabeca:
+            print("Lista vazia")
+            return
+        temp = self.cabeca
+        while True:
+            print(temp.dado, end=" -> ")
+            temp = temp.proximo
+            if temp == self.cabeca:
+                break
+        print("(retorna ao início)")
+
+# Exemplo de uso
+lista = ListaCircular()
+lista.inserir_no_fim(10)
+lista.inserir_no_fim(20)
+lista.inserir_no_fim(30)
+lista.exibir()
+
+print("Elemento 20 encontrado?", lista.buscar(20))
+print("Número de elementos na lista:", lista.contar_elementos())
+
+lista.remover(20)
+lista.exibir()
