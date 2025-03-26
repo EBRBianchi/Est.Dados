@@ -1,0 +1,91 @@
+import random
+
+# Classe que representa um nó na lista encadeada circular
+class Cavaleiro:
+    def __init__(self, nome):
+        self.nome = nome      # Nome do cavaleiro
+        self.vida = random.randint(50, 100)  # Vida aleatória entre 50 e 100
+        self.proximo = None   # Ponteiro para o próximo nó (cavaleiro)
+
+# Classe que representa a lista encadeada circular
+class ListaEncadeadaCircular:
+    def __init__(self):
+        self.cabeca = None  # Referência inicial da lista
+
+    # Método para inserir um cavaleiro na lista
+    def inserir(self, nome):
+        novo_no = Cavaleiro(nome)
+        if not self.cabeca:
+            self.cabeca = novo_no
+            self.cabeca.proximo = self.cabeca  # O primeiro elemento aponta para si mesmo (circular)
+        else:
+            temp = self.cabeca
+            while temp.proximo != self.cabeca:  # Percorre até o último nó
+                temp = temp.proximo
+            temp.proximo = novo_no         # Liga o último nó ao novo
+            novo_no.proximo = self.cabeca  # Fecha o ciclo apontando para o primeiro
+
+    # Método para remover um cavaleiro da lista
+    def remover(self, alvo):
+        if not self.cabeca:
+            return
+        atual = self.cabeca
+        anterior = None
+        while True:
+            if atual.nome == alvo:
+                if anterior:  # Se o alvo não for o primeiro nó
+                    anterior.proximo = atual.proximo
+                else:  # Caso o cavaleiro eliminado seja o primeiro da lista
+                    temp = self.cabeca
+                    while temp.proximo != self.cabeca:
+                        temp = temp.proximo
+                    temp.proximo = self.cabeca.proximo
+                    self.cabeca = self.cabeca.proximo  # Atualiza a nova cabeça da lista
+                return  # Encerra a função após a remoção
+            anterior = atual
+            atual = atual.proximo
+            if atual == self.cabeca:  # Se a volta completa na lista for feita
+                break
+
+    # Método para exibir os cavaleiros presentes na lista
+    def exibir(self):
+        nos = []
+        temp = self.cabeca
+        if temp:
+            while True:
+                nos.append(f"{temp.nome} (Vida: {temp.vida})")  # Adiciona nome e vida
+                temp = temp.proximo
+                if temp == self.cabeca:
+                    break
+        return nos
+
+# Função principal que executa a batalha épica
+def batalha_epica(cavaleiros):
+    lista = ListaEncadeadaCircular()  # Cria a lista encadeada circular
+    for cavaleiro in cavaleiros:
+        lista.inserir(cavaleiro)  # Insere cada cavaleiro na lista
+
+    print(f"Início da batalha com os cavaleiros: {lista.exibir()}")
+
+    # Loop até que reste apenas um cavaleiro
+    while len(lista.exibir()) > 1:
+        temp = lista.cabeca
+        atacante = temp  # Cavaleiro que ataca
+        defensor = temp.proximo  # Cavaleiro que sofre dano
+
+        dano = random.randint(5, 10)  # Dano aleatório entre 5 e 10
+        defensor.vida -= dano
+        print(f"{atacante.nome} atacou {defensor.nome} causando {dano} de dano!")
+
+        # Se o defensor for derrotado, ele é removido
+        if defensor.vida <= 0:
+            print(f"{defensor.nome} foi eliminado!")
+            lista.remover(defensor.nome)
+        print(f"Cavaleiros restantes: {lista.exibir()}\n")
+
+    # Exibe o vencedor
+    print(f"O campeão é: {lista.exibir()[0]}!")
+
+# Exemplo de uso
+cavaleiros = ["Arthur", "Lancelot", "Percival", "Gawain", "Galahad"]
+batalha_epica(cavaleiros)
